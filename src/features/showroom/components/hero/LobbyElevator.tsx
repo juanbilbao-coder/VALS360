@@ -6,7 +6,7 @@ const lobbySceneImage = '/r4.png';
 type LobbyElevatorProps = {
   isOpen: boolean;
   selectedFloor: string | null;
-  stops: Array<{ key: string; label: string }>;
+  stops: Array<{ key: string; label: string; composition: string }>;
   onToggle: () => void;
   onClose: () => void;
   onSelectStop: (floor: string) => void;
@@ -114,19 +114,13 @@ export default function LobbyElevator({
               alt="Interior del lobby de VALS 360"
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,12,10,0.18)_0%,rgba(15,12,10,0.12)_36%,rgba(15,12,10,0.42)_100%)]" />
 
             <div className="absolute inset-0 flex flex-col justify-between p-4 sm:p-6">
-              <div className="flex items-start justify-between gap-4">
-                <div className="max-w-[260px] rounded-[20px] border border-white/20 bg-[rgba(247,245,243,0.18)] px-4 py-3 text-white backdrop-blur-md">
-                  <p className="text-[10px] uppercase tracking-[0.32em] text-white/75">Lobby</p>
-                  <h4 className="mt-1 font-serif text-[1.2rem] leading-none text-white">Seleccioná tu nivel</h4>
-                </div>
-
+              <div className="flex items-start justify-end">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/24 bg-[rgba(247,245,243,0.14)] text-white backdrop-blur-md transition hover:bg-[rgba(247,245,243,0.22)]"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(255,255,255,0.42)] bg-[rgba(247,245,243,0.72)] text-[var(--text-primary)] shadow-[0_12px_28px_rgba(15,12,10,0.1)] backdrop-blur-sm transition hover:bg-[rgba(247,245,243,0.88)]"
                   aria-label="Volver al edificio"
                 >
                   <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
@@ -142,36 +136,39 @@ export default function LobbyElevator({
                 </button>
               </div>
 
-              <div className="ml-auto w-full max-w-[280px] rounded-[24px] border border-white/18 bg-[rgba(247,245,243,0.18)] p-4 backdrop-blur-xl sm:p-5">
-                <div className="mb-3 flex items-center justify-between gap-3 text-white">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-[0.28em] text-white/70">Ascensor</p>
-                    <p className="mt-1 font-serif text-[1rem] leading-none">Paradas disponibles</p>
-                  </div>
-                  <span className="rounded-full border border-white/18 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-white/78">
-                    VALS 360
-                  </span>
+              <div className="ml-auto w-full max-w-[440px] rounded-[26px] border border-[rgba(255,255,255,0.52)] bg-[rgba(247,245,243,0.78)] p-5 text-[var(--text-primary)] shadow-[0_20px_48px_rgba(15,12,10,0.14)] backdrop-blur-sm sm:p-6">
+                <div className="mb-5">
+                  <p className="font-serif text-[1.35rem] leading-none text-[var(--text-primary)]">
+                    Niveles del edificio
+                  </p>
+                  <p className="mt-2 text-[11px] uppercase tracking-[0.16em] text-[rgba(85,85,85,0.82)]">
+                    Seleccioná una planta para explorar su composición
+                  </p>
+                  <p className="mt-2 text-[11px] tracking-[0.04em] text-[rgba(85,85,85,0.68)]">
+                    Subsuelo con 22 cocheras
+                  </p>
                 </div>
 
-                <div className="grid max-h-[46svh] grid-cols-2 gap-2 overflow-y-auto pr-1">
+                <div className="grid max-h-[46svh] grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
                   {stops.map((stop) => {
                     const isActive = selectedFloor === stop.key;
-                    const isNumericStop = /^\d+$/.test(stop.key);
                     return (
                       <button
                         key={stop.key}
                         type="button"
                         onClick={() => onSelectStop(stop.key)}
-                        className={`rounded-[16px] border px-3 py-3 text-left transition ${
+                        className={`rounded-[18px] border px-3 py-3.5 text-left transition ${
                           isActive
-                            ? 'border-white/45 bg-white/28 text-white'
-                            : 'border-white/14 bg-white/10 text-white/82 hover:border-white/28 hover:bg-white/16'
+                            ? 'border-[rgba(184,144,80,0.42)] bg-[rgba(184,144,80,0.16)] text-[var(--text-primary)]'
+                            : 'border-[rgba(184,144,80,0.14)] bg-white/64 text-[rgba(85,85,85,0.9)] hover:border-[rgba(184,144,80,0.26)] hover:bg-white/82'
                         }`}
                       >
-                        <span className="block text-[10px] uppercase tracking-[0.22em] text-white/66">
-                          {isNumericStop ? 'Piso' : 'Nivel'}
+                        <span className="block font-serif text-[1.02rem] leading-none text-[var(--text-primary)]">
+                          {stop.label}
                         </span>
-                        <span className="mt-1 block font-serif text-[1rem] leading-none">{stop.label}</span>
+                        <span className="mt-2 block text-[10px] uppercase tracking-[0.14em] text-[rgba(85,85,85,0.72)]">
+                          {stop.composition}
+                        </span>
                       </button>
                     );
                   })}

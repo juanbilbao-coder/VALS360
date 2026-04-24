@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import mapaImage from '../../../../mapa.png';
 
 export default function LocationView() {
   return (
@@ -13,30 +14,27 @@ export default function LocationView() {
     >
       <div className="location-view">
         <div className="location-copy">
-          <p className="location-text">
-            <span className="location-title">UBICADO</span> en una esquina céntrica de la ciudad, en calle
-            Libertad y Sarmiento. Un punto estratégico con inmejorables accesos: zona comercial y de
-            servicios, a pocos minutos de clínicas, colegios y bancos. Además, si lo que necesitás es
-            contacto con la naturaleza, el Paseo del Riel se encuentra a pocos pasos de tu residencia.
-          </p>
+          <h3 className="location-heading">Ubicado en una esquina estratégica de Río Tercero.</h3>
+          <div className="location-copy__body">
+            <p className="location-text">
+              Sobre Libertad y Sarmiento, VALS 360 conecta vida urbana, servicios y espacios verdes en
+              una ubicación central con acceso inmediato a comercios, clínicas, colegios y bancos.
+            </p>
+            <a
+              className="btn-outline location-copy-cta"
+              href="https://www.google.com/maps/search/?api=1&query=Libertad%20y%20Sarmiento%2C%20R%C3%ADo%20Tercero%2C%20C%C3%B3rdoba"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Ver en Google Maps
+            </a>
+          </div>
         </div>
 
         <div className="location-map">
-          <div className="location-marker">
-            <span className="location-mark">V</span>
-            <span className="location-line"></span>
-          </div>
           <div className="location-map-frame">
-            <img src="/ubicacion-map.svg" alt="Mapa de ubicación VALS 360" />
+            <img src={mapaImage} alt="Mapa de ubicación VALS 360" />
           </div>
-          <a
-            className="btn-outline location-map-cta"
-            href="https://www.google.com/maps/search/?api=1&query=Libertad%20y%20Sarmiento%2C%20R%C3%ADo%20Tercero%2C%20C%C3%B3rdoba"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Ver en Google Maps
-          </a>
         </div>
       </div>
     </motion.div>

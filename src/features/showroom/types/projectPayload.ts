@@ -41,6 +41,7 @@ export type ProjectFloorStop = {
   key: string;
   code: string;
   label: string;
+  lobbyComposition: string;
   kind: ProjectFloorStopKind;
   floorNumber?: number;
   navigable: boolean;
@@ -66,10 +67,17 @@ export type ProjectProgressPhase = {
   progress: number;
 };
 
+export type ProjectProgressGalleryItem = {
+  src: string;
+  alt: string;
+  caption?: string;
+};
+
 export type ProjectProgress = {
   months: string[];
   phases: ProjectProgressPhase[];
   milestones: string[];
+  gallery: ProjectProgressGalleryItem[];
 };
 
 export type ProjectFilterConfig = {

@@ -1,55 +1,47 @@
 import { useMemo } from 'react';
 import type { UnitInfo } from '../types';
 import {
-  selectFloorOrder,
   selectSidebarSummaryByKey,
   selectSortedUnitsForCommercialList,
   selectUnitsForFloorKey
 } from '../data/selectors';
 
-type FloorSummaries = Record<string, { available: number; total: number; note?: string }>;
-
 type UseSidebarFloorOptions = {
   selectedFloor: string | null;
   hoveredFloor: string | null;
   units: UnitInfo[];
-  floorSummaries: FloorSummaries;
 };
 
-export function useSidebarFloor({ selectedFloor, hoveredFloor, units, floorSummaries }: UseSidebarFloorOptions) {
-  const floorOrder = useMemo(() => selectFloorOrder(), []);
+export function useSidebarFloor({ selectedFloor, hoveredFloor, units }: UseSidebarFloorOptions) {
+  // Hover only drives the facade highlight. Unit data is derived from the clicked floor.
+  void hoveredFloor;
+  const activeFloor = selectedFloor ?? null;
+  const floorKey = activeFloor;
 
-  const activeFloor = hoveredFloor ?? selectedFloor ?? null;
-  const sidebarFloorKey = activeFloor;
-  const sidebarFloorNumber = sidebarFloorKey && /^\d+$/.test(sidebarFloorKey) ? Number(sidebarFloorKey) : null;
+  const floorUnits = useMemo(() => {
+    return selectSortedUnitsForCommercialList(selectUnitsForFloorKey(floorKey, units));
+  }, [floorKey, units]);
 
-  const sidebarUnits = useMemo(() => {
-    return selectSortedUnitsForCommercialList(selectUnitsForFloorKey(sidebarFloorKey, units));
-  }, [sidebarFloorKey, units]);
-
-  const sidebarSummary = useMemo(() => {
-    if (!sidebarFloorKey) {
+  const floorSummary = useMemo(() => {
+    if (!floorKey) {
       return null;
     }
 
-    const explicitSummary = floorSummaries[sidebarFloorKey] ?? selectSidebarSummaryByKey(sidebarFloorKey);
+    const explicitSummary = selectSidebarSummaryByKey(floorKey);
     if (explicitSummary) {
       return explicitSummary;
     }
 
     return {
-      available: sidebarUnits.filter((unit) => unit.status === 'Disponible').length,
-      total: sidebarUnits.length,
-      note: sidebarUnits.length > 0 ? 'Unidades disponibles para explorar' : 'Sin unidades cargadas'
+      available: floorUnits.filter((unit) => unit.status === 'Disponible').length,
+      total: floorUnits.length,
+      note: floorUnits.length > 0 ? 'Unidades disponibles para explorar' : 'Sin unidades cargadas'
     };
-  }, [floorSummaries, sidebarFloorKey, sidebarUnits]);
+  }, [floorKey, floorUnits]);
 
   return {
-    floorOrder,
     activeFloor,
-    sidebarFloorKey,
-    sidebarFloorNumber,
-    sidebarUnits,
-    sidebarSummary
+    floorUnits,
+    floorSummary
   };
 }

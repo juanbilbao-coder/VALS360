@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import type { UnitInfo } from '../types';
+import axonometryMock from '../../../../axonometria.jpeg';
 
 type FloorSummary = {
   available: number;
@@ -18,13 +19,11 @@ type FloorAxonometryProps = {
 
 type UnitArea = {
   unit: UnitInfo;
-  points: string;
-  labelX: number;
-  labelY: number;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
 };
-
-const VIEWBOX_WIDTH = 1000;
-const VIEWBOX_HEIGHT = 560;
 
 function normalizeStatus(status: string) {
   return status.trim().toLowerCase();
@@ -36,36 +35,27 @@ function buildUnitAreas(units: UnitInfo[]): UnitArea[] {
     return [];
   }
 
-  const rows = count > 4 ? 2 : 1;
+  const rows = count <= 3 ? 1 : 2;
   const columns = Math.ceil(count / rows);
-  const gap = 18;
-  const startX = 120;
-  const startY = rows === 1 ? 170 : 115;
-  const totalWidth = 760;
-  const totalHeight = rows === 1 ? 240 : 330;
-  const cellWidth = (totalWidth - gap * (columns - 1)) / columns;
-  const cellHeight = (totalHeight - gap * (rows - 1)) / rows;
-  const skew = 38;
-  const depth = 26;
+  const frameLeft = 17;
+  const frameTop = rows === 1 ? 42 : 26;
+  const frameWidth = 66;
+  const frameHeight = rows === 1 ? 23 : 42;
+  const gapX = 1.8;
+  const gapY = 2.4;
+  const cellWidth = (frameWidth - gapX * (columns - 1)) / columns;
+  const cellHeight = (frameHeight - gapY * (rows - 1)) / rows;
 
   return units.map((unit, index) => {
     const row = Math.floor(index / columns);
     const column = index % columns;
-    const rowOffset = row * 28;
-    const x = startX + column * (cellWidth + gap) + rowOffset;
-    const y = startY + row * (cellHeight + gap);
-    const points = [
-      `${x + skew},${y}`,
-      `${x + cellWidth},${y + depth}`,
-      `${x + cellWidth - skew},${y + cellHeight}`,
-      `${x},${y + cellHeight - depth}`
-    ].join(' ');
 
     return {
       unit,
-      points,
-      labelX: x + cellWidth / 2,
-      labelY: y + cellHeight / 2
+      left: frameLeft + column * (cellWidth + gapX),
+      top: frameTop + row * (cellHeight + gapY),
+      width: cellWidth,
+      height: cellHeight
     };
   });
 }
@@ -112,59 +102,43 @@ export default function FloorAxonometry({
 
       {hasAxonometry ? (
         <div className="floor-axono__canvas" aria-label={`Axonometría interactiva de ${floorLabel}`}>
-          <svg viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`} role="img" aria-label={`Unidades de ${floorLabel}`}>
-            <defs>
-              <linearGradient id="floorAxonoPlate" x1="0%" x2="100%" y1="0%" y2="100%">
-                <stop offset="0%" stopColor="#F7F5F3" />
-                <stop offset="100%" stopColor="#E6DED2" />
-              </linearGradient>
-            </defs>
-
-            <polygon
-              points="90,390 500,110 920,250 515,510"
-              fill="url(#floorAxonoPlate)"
-              stroke="rgba(120,95,55,0.24)"
-              strokeWidth="2"
-            />
-            <polyline
-              points="110,390 500,140 900,255"
-              fill="none"
-              stroke="rgba(120,95,55,0.16)"
-              strokeWidth="2"
+          <div className="floor-axono__stage" role="img" aria-label={`Unidades de ${floorLabel}`}>
+            <img
+              src={axonometryMock}
+              alt={`Axonometría de referencia para ${floorLabel}`}
+              className="floor-axono__mock-image"
             />
 
-            {unitAreas.map(({ unit, points, labelX, labelY }) => {
+            <div className="floor-axono__units-layer">
+              {unitAreas.map(({ unit, left, top, width, height }) => {
               const status = normalizeStatus(unit.status);
               return (
-                <g
+                <button
                   key={unit.code}
                   className={`floor-axono__unit floor-axono__unit--${status}`}
-                  role="button"
-                  tabIndex={0}
+                  style={{
+                    left: `${left}%`,
+                    top: `${top}%`,
+                    width: `${width}%`,
+                    height: `${height}%`
+                  }}
                   aria-label={`${unit.code}, ${formatUnitMeta(unit)}, ${unit.status}`}
                   onPointerEnter={() => setHoveredUnit(unit)}
                   onPointerLeave={() => setHoveredUnit(null)}
                   onFocus={() => setHoveredUnit(unit)}
                   onBlur={() => setHoveredUnit(null)}
                   onClick={() => onSelectUnit(unit)}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                      event.preventDefault();
-                      onSelectUnit(unit);
-                    }
-                  }}
+                  type="button"
                 >
-                  <polygon points={points} />
-                  <text x={labelX} y={labelY - 8} textAnchor="middle" aria-hidden="true">
-                    {unit.code}
-                  </text>
-                  <text x={labelX} y={labelY + 18} textAnchor="middle" className="floor-axono__unit-status" aria-hidden="true">
-                    {unit.status}
-                  </text>
-                </g>
+                  <span className="floor-axono__unit-topline" aria-hidden="true" />
+                  <span className="floor-axono__unit-code">{unit.code}</span>
+                  <span className="floor-axono__unit-meta">{unit.type} · {unit.area} m²</span>
+                  <span className="floor-axono__unit-status-badge">{unit.status}</span>
+                </button>
               );
             })}
-          </svg>
+            </div>
+          </div>
 
           {hoveredUnit ? (
             <div className="floor-axono__tooltip">

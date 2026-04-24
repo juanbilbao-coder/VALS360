@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { ganttMonths, ganttPhases, ganttMilestones } from '../data/progress';
-import { heroSlides } from '../data/media';
+import { ganttGallery, ganttMilestones, ganttMonths, ganttPhases } from '../data/progress';
 
 export default function ProgressView() {
+  const galleryItems = useMemo(() => ganttGallery.slice(0, 3), []);
+  const [activeImage, setActiveImage] = useState(galleryItems[0] ?? null);
+
   return (
     <motion.div
       key="avances"
@@ -54,10 +56,32 @@ export default function ProgressView() {
               ))}
             </ul>
           </div>
-          <div className="gantt-gallery">
-            {heroSlides.slice(0, 3).map((src) => (
-              <img key={src} src={src} alt="Avance de obra" />
-            ))}
+          <div>
+            <p className="eyebrow">Registro de obra</p>
+            {activeImage ? (
+              <div className="gantt-gallery-panel">
+                <div className="gantt-gallery-main">
+                  <img src={activeImage.src} alt={activeImage.alt} />
+                </div>
+
+                <div className="gantt-gallery-thumbs">
+                  {galleryItems.map((item) => {
+                    const isActive = activeImage.src === item.src;
+                    return (
+                      <button
+                        key={item.src}
+                        type="button"
+                        className={`gantt-gallery-thumb ${isActive ? 'is-active' : ''}`}
+                        onClick={() => setActiveImage(item)}
+                        aria-label={item.caption ?? item.alt}
+                      >
+                        <img src={item.src} alt={item.alt} />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

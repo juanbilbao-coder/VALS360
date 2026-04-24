@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { filterDefaults, unitData } from '../data/units';
-import { floorSummaries } from '../data/floors';
 import { selectNavigationStops } from '../data/selectors';
 import type { HeroView, UnitFilters, UnitInfo } from '../types';
 import { useSidebarFloor } from './useSidebarFloor';
@@ -16,19 +15,12 @@ export function useShowroomStateCore() {
 
   const isProjectView = rightView === 'proyecto';
   const { filteredUnits, activeFilterChips } = useUnitFilters(unitData, filters);
-  const { floorOrder, sidebarFloorKey, sidebarFloorNumber, sidebarUnits, sidebarSummary } = useSidebarFloor({
+  const { floorUnits, floorSummary } = useSidebarFloor({
     selectedFloor,
     hoveredFloor,
-    units: unitData,
-    floorSummaries
+    units: unitData
   });
   const navigationStops = useMemo(() => selectNavigationStops(), []);
-
-  const setFloorFromSidebar = (nextFloor: number) => {
-    setHoveredFloor(null);
-    setSelectedFloor(String(nextFloor));
-    setIsLobbyOpen(false);
-  };
 
   const selectNavigationStop = (floorKey: string) => {
     setHoveredFloor(null);
@@ -72,11 +64,8 @@ export function useShowroomStateCore() {
     selectFloor,
     clearFloor,
     hoverFloor,
-    floorOrder,
-    sidebarFloorKey,
-    sidebarFloorNumber,
-    sidebarUnits,
-    sidebarSummary,
+    floorUnits,
+    floorSummary,
     navigationStops,
     filters,
     setFilters,
@@ -89,7 +78,6 @@ export function useShowroomStateCore() {
     setIsLobbyOpen,
     toggleLobby,
     closeLobby,
-    setFloorFromSidebar,
     selectNavigationStop
   };
 }

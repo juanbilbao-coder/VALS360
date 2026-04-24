@@ -20,7 +20,7 @@ export default function HeroNavigation({ rightView, showBuildingVideo, onChangeV
 
   return (
     <div className={`right-vertical-nav z-20 ${showBuildingVideo ? 'menu-hidden' : 'menu-visible'}`}>
-      <nav className="right-vertical-links">
+      <nav className="right-vertical-links rounded-[22px] border border-[rgba(255,255,255,0.45)] bg-[rgba(247,245,243,0.68)] px-5 py-4 shadow-[0_16px_34px_rgba(15,12,10,0.08)] backdrop-blur-sm">
         <button
           type="button"
           onClick={() => onChangeView('proyecto')}

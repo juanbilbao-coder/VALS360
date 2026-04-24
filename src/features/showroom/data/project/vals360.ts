@@ -296,6 +296,7 @@ function buildNumericFloorStop(floorNumber: number): ProjectFloorStop {
     key,
     code: `P${floorNumber}`,
     label: `Piso ${floorNumber}`,
+    lobbyComposition: floorNumber === 10 ? '2 departamentos' : '6 departamentos',
     kind: 'numeric',
     floorNumber,
     navigable: true,
@@ -306,9 +307,23 @@ function buildNumericFloorStop(floorNumber: number): ProjectFloorStop {
 
 const floors: ProjectFloorStop[] = [
   {
+    key: 'ss',
+    code: 'SS',
+    label: 'Subsuelo',
+    lobbyComposition: '22 cocheras',
+    kind: 'special',
+    navigable: false,
+    summary: {
+      available: 22,
+      total: 22,
+      note: 'Cocheras'
+    }
+  },
+  {
     key: 'pb',
     code: 'PB',
     label: 'Planta Baja',
+    lobbyComposition: '3 locales · quincho · gimnasio · coworking',
     kind: 'special',
     navigable: true,
     summary: buildFloorSummary('pb', 'Planta Baja'),
@@ -318,6 +333,7 @@ const floors: ProjectFloorStop[] = [
     key: 'ep',
     code: 'EP',
     label: 'Entrepiso',
+    lobbyComposition: '3 oficinas · 1 local · 3 deptos',
     kind: 'special',
     navigable: true,
     summary: buildFloorSummary('ep', 'Entrepiso'),
@@ -382,6 +398,23 @@ export const vals360ProjectPayload: ProjectPayload = {
       'Estructura: 70% completada',
       'Carpinterías: inicio de colocación',
       'Instalaciones: avance 35%'
+    ],
+    gallery: [
+      {
+        src: '/building-render.jpg',
+        alt: 'Registro de obra 1',
+        caption: 'Vista general de avance'
+      },
+      {
+        src: '/render-2.jpg',
+        alt: 'Registro de obra 2',
+        caption: 'Frente y envolvente'
+      },
+      {
+        src: '/r4.png',
+        alt: 'Registro de obra 3',
+        caption: 'Detalle de volumen'
+      }
     ]
   },
   rules: {

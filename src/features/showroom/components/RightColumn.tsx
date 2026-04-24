@@ -1,7 +1,7 @@
 import React from 'react';
 import HeroNavigation from './hero/HeroNavigation';
 import RightSidebarLogo from './hero/RightSidebarLogo';
-import SidebarPanel from './hero/SidebarPanel';
+import SidebarActions from './hero/SidebarActions';
 import ShowroomViews from './hero/ShowroomViews';
 import type { HeroView, UnitFilters, UnitInfo } from '../types';
 
@@ -31,7 +31,7 @@ type RightColumnProps = {
     floorUnits: UnitInfo[];
     floorSummary: SidebarSummary | null;
     isLobbyOpen: boolean;
-    navigationStops: Array<{ key: string; label: string }>;
+    navigationStops: Array<{ key: string; label: string; composition: string }>;
     onToggleLobby: () => void;
     onCloseLobby: () => void;
     onSelectNavigationStop: (floor: string) => void;
@@ -44,18 +44,12 @@ type RightColumnProps = {
     units: UnitInfo[];
     onSelectUnit: (unit: UnitInfo) => void;
   };
-  sidebar: {
-    sidebarFloorKey: string | null;
-    sidebarSummary: SidebarSummary | null;
-    sidebarUnits: UnitInfo[];
-  };
 };
 
 export default function RightColumn({
   navigation,
   building,
-  units,
-  sidebar
+  units
 }: RightColumnProps) {
   const { rightView, onChangeView, isProjectView, showBuildingVideo } = navigation;
   const {
@@ -77,17 +71,11 @@ export default function RightColumn({
     onSelectNavigationStop
   } = building;
   const { filters, onChangeFilters, onResetFilters, activeFilterChips, units: unitList, onSelectUnit } = units;
-  const {
-    sidebarFloorKey,
-    sidebarSummary,
-    sidebarUnits
-  } = sidebar;
   const isFloorViewActive = rightView === 'proyecto' && Boolean(selectedFloor) && !showBuildingVideo;
-  const visibleSidebarFloorKey = isFloorViewActive ? null : sidebarFloorKey;
 
   return (
     <div className="w-full lg:w-[68%] bg-[#F7F5F3] lg:sticky top-0 min-h-[100svh] lg:h-screen overflow-visible lg:overflow-hidden flex flex-col z-[1] relative">
-      <div className={`right-shell ${visibleSidebarFloorKey ? 'right-shell--sidebar-open' : ''} ${isFloorViewActive ? 'right-shell--floor-view' : ''}`}>
+      <div className={`right-shell ${isFloorViewActive ? 'right-shell--floor-view' : ''}`}>
         <div className="right-main">
           {/* Right column owns view switching and building/media stage. */}
           <HeroNavigation
@@ -130,14 +118,12 @@ export default function RightColumn({
           </div>
         </div>
 
-        {/* Sidebar owns floor hover context and unit quick access. */}
-        <SidebarPanel
-          logo={<RightSidebarLogo className="logo-right" />}
-          sidebarFloorKey={visibleSidebarFloorKey}
-          sidebarSummary={sidebarSummary}
-          sidebarUnits={sidebarUnits}
-          onSelectUnit={onSelectUnit}
-        />
+        <aside className="right-sidebar right-sidebar--static" aria-label="Contactos VALS 360">
+          <div className="right-sidebar__logo">
+            <RightSidebarLogo className="logo-right" />
+          </div>
+          <SidebarActions />
+        </aside>
       </div>
     </div>
   );

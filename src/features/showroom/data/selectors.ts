@@ -76,7 +76,8 @@ export function selectNavigationStops() {
     .filter((floor) => floor.navigable)
     .map((floor) => ({
       key: floor.key,
-      label: floor.label
+      label: floor.label,
+      composition: floor.lobbyComposition
     }));
 }
 
@@ -211,4 +212,8 @@ export function selectProgressPhases() {
 
 export function selectProgressMilestones() {
   return activeProjectPayload.progress.milestones;
+}
+
+export function selectProgressGallery() {
+  return activeProjectPayload.progress.gallery;
 }

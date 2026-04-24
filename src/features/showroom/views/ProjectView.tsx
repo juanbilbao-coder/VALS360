@@ -21,7 +21,7 @@ type ProjectViewProps = {
   floorSummary: { available: number; total: number; note?: string } | null;
   onSelectUnit: (unit: UnitInfo) => void;
   isLobbyOpen: boolean;
-  navigationStops: Array<{ key: string; label: string }>;
+  navigationStops: Array<{ key: string; label: string; composition: string }>;
   onToggleLobby: () => void;
   onCloseLobby: () => void;
   onSelectNavigationStop: (floor: string) => void;

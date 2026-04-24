@@ -21,11 +21,8 @@ export function useShowroomState({ canPlayBuildingVideo }: UseShowroomStateParam
     selectFloor,
     clearFloor,
     hoverFloor,
-    floorOrder,
-    sidebarFloorKey,
-    sidebarFloorNumber,
-    sidebarUnits,
-    sidebarSummary,
+    floorUnits,
+    floorSummary,
     navigationStops,
     filters,
     setFilters,
@@ -37,7 +34,6 @@ export function useShowroomState({ canPlayBuildingVideo }: UseShowroomStateParam
     isLobbyOpen,
     toggleLobby,
     closeLobby,
-    setFloorFromSidebar,
     selectNavigationStop
   } = useShowroomStateCore();
 
@@ -77,11 +73,8 @@ export function useShowroomState({ canPlayBuildingVideo }: UseShowroomStateParam
     selectFloor,
     clearFloor,
     hoverFloor,
-    floorOrder,
-    sidebarFloorKey,
-    sidebarFloorNumber,
-    sidebarUnits,
-    sidebarSummary,
+    floorUnits,
+    floorSummary,
     navigationStops,
     filters,
     setFilters,
@@ -99,7 +92,6 @@ export function useShowroomState({ canPlayBuildingVideo }: UseShowroomStateParam
     closeRenderModal,
     goPrevRender,
     goNextRender,
-    setFloorFromSidebar,
     selectNavigationStop
   };
 }

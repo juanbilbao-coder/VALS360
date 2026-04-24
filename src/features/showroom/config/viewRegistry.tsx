@@ -20,7 +20,7 @@ export type ViewRenderProps = {
   floorUnits: UnitInfo[];
   floorSummary: { available: number; total: number; note?: string } | null;
   isLobbyOpen: boolean;
-  navigationStops: Array<{ key: string; label: string }>;
+  navigationStops: Array<{ key: string; label: string; composition: string }>;
   onToggleLobby: () => void;
   onCloseLobby: () => void;
   onSelectNavigationStop: (floor: string) => void;

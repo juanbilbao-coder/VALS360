@@ -19,9 +19,8 @@ export default function HeroSection({ canPlayBuildingVideo }: { canPlayBuildingV
     selectFloor,
     clearFloor,
     hoverFloor,
-    sidebarFloorKey,
-    sidebarUnits,
-    sidebarSummary,
+    floorUnits,
+    floorSummary,
     navigationStops,
     filters,
     setFilters,
@@ -69,8 +68,8 @@ export default function HeroSection({ canPlayBuildingVideo }: { canPlayBuildingV
             onSelectFloor: selectFloor,
             onBackToBuilding: clearFloor,
             onHoverFloor: hoverFloor,
-            floorUnits: sidebarUnits,
-            floorSummary: sidebarSummary,
+            floorUnits,
+            floorSummary,
             isLobbyOpen,
             navigationStops,
             onToggleLobby: toggleLobby,
@@ -84,11 +83,6 @@ export default function HeroSection({ canPlayBuildingVideo }: { canPlayBuildingV
             activeFilterChips,
             units: filteredUnits,
             onSelectUnit: setSelectedUnit
-          }}
-          sidebar={{
-            sidebarFloorKey,
-            sidebarSummary,
-            sidebarUnits
           }}
         />
       </section>
