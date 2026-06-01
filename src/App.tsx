@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import IntroLoader from './components/IntroLoader';
 import SiteFooter from './components/SiteFooter';
+import VideoIntro from './components/VideoIntro';
 import HeroSection from './features/showroom/components/HeroSection';
 
 export default function App() {
   const introEnabled = true;
-  const [phase, setPhase] = useState<'brand' | 'showroom'>(introEnabled ? 'brand' : 'showroom');
+  const [phase, setPhase] = useState<'intro' | 'showroom'>(introEnabled ? 'intro' : 'showroom');
+  const [showIntroOverlay, setShowIntroOverlay] = useState(introEnabled);
   const [revealStage, setRevealStage] = useState(introEnabled ? -1 : 3);
   const [siteVisible, setSiteVisible] = useState(!introEnabled);
 
-  const handleIntroFinish = () => {
-    if (phase !== 'brand') {
+  const handleIntroReveal = () => {
+    if (phase !== 'intro') {
       return;
     }
     setPhase('showroom');
+  };
+
+  const handleIntroComplete = () => {
+    setShowIntroOverlay(false);
   };
 
   useEffect(() => {
@@ -49,8 +54,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-void text-primary selection:bg-accent selection:text-inverse">
-      {introEnabled && phase === 'brand' && (
-        <IntroLoader onFinish={handleIntroFinish} />
+      {introEnabled && showIntroOverlay && (
+        <VideoIntro
+          desktopSrc="/videos/VIDEOHERO-web.mp4"
+          mobileSrc="/videos/VIDEOHERO-mobile.mp4"
+          onReveal={handleIntroReveal}
+          onComplete={handleIntroComplete}
+        />
       )}
       <div className={`app-content ${siteVisible ? 'app-content--visible' : ''} ${revealClasses}`}>
         <HeroSection canPlayBuildingVideo={!introEnabled || phase === 'showroom'} />
